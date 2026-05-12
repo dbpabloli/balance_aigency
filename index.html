@@ -220,7 +220,7 @@ em{font-style:italic}
 .carousel{margin:-32px 0 0;width:100vw;margin-left:calc(50% - 50vw);position:relative}
 .carousel-track{
   display:flex;gap:16px;overflow-x:scroll;overflow-y:hidden;scroll-snap-type:x mandatory;
-  scroll-behavior:smooth;padding:160px max(48px,calc(50vw - 476px));-webkit-overflow-scrolling:touch
+  scroll-behavior:smooth;padding:96px max(48px,calc(50vw - 476px)) 160px;-webkit-overflow-scrolling:touch
 }
 .carousel-track.is-animating{scroll-snap-type:none;scroll-behavior:auto}
 .carousel-track::-webkit-scrollbar{display:none}
@@ -495,6 +495,140 @@ em{font-style:italic}
 .play-overlay.visible{display:flex;opacity:1;transform:translate(-50%,-50%) scale(1)}
 .play-overlay:hover{background:rgba(255,255,255,.72);transform:translate(-50%,-50%) scale(1.04)}
 .video-wrap.is-ended{cursor:pointer}
+
+
+/* ============================================================
+   MOBILE FIX v3 — патч поверх существующих стилей
+   ============================================================ */
+
+/* 1) Устраняем horizontal scroll (iPhone 12 Pro: белая полоса справа) */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  /* 2) Sticky-bar — не выходит за границы экрана */
+  .sticky-bar {
+    width: calc(100% - 32px);
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+  }
+
+  /* 3) Карусель — гарантия что не выпирает */
+  .carousel {
+    width: 100%;
+    margin-left: 0;
+    overflow-x: auto;
+  }
+
+  /* 4) Уменьшаем vertical-spacing между текстом и медиа в секциях */
+  .section-block {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+
+  .section-block + .section-block {
+    margin-top: 0 !important;
+  }
+
+  /* Если в секциях используются другие классы для media-блоков — общий gap */
+  section > * + * {
+    margin-top: 16px;
+  }
+
+  /* Уменьшаем зазор между параграфами и изображениями */
+  p + img, p + picture, p + figure, p + video,
+  .text-block + .media-block,
+  .copy + .media,
+  h2 + p, h3 + p {
+    margin-top: 16px !important;
+  }
+
+  /* Уменьшаем margin-top у карусели */
+  .carousel-section,
+  section .carousel {
+    margin-top: 24px !important;
+  }
+
+  /* 5) Логотипы — 2 ряда по 3, более компактные */
+  :root {
+    --logo-h: 20px;  /* было 27.5px — теперь 20px на mobile */
+  }
+
+  .logo-plate {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    column-gap: 16px !important;
+    row-gap: 32px !important;
+    padding: 16px 0 !important;
+  }
+
+  .logo-cell {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logo-cell img {
+    height: 20px !important;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  /* 6) Footer — больше воздуха, аккуратное выравнивание */
+  footer,
+  .site-footer,
+  .footer {
+    padding: 48px 24px 32px !important;
+  }
+
+  footer .logo,
+  .site-footer .logo,
+  .footer-logo {
+    margin-top: 24px;
+  }
+
+  footer .copyright,
+  .site-footer .copyright,
+  .footer-copyright {
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+
+  /* Кнопка Contact us в футере */
+  footer .btn,
+  .site-footer .btn,
+  .footer .btn,
+  footer a[role="button"],
+  .next-step .btn-primary {
+    margin: 24px auto !important;
+    display: inline-flex;
+  }
+
+  /* Next-step секция — больше воздуха снизу до футера */
+  .next-step {
+    padding-bottom: 64px !important;
+  }
+
+  /* 7) Hero — гарантия что wordmark не overflow */
+  .hero-wordmark,
+  .hero-wordmark img {
+    max-width: calc(100vw - 32px);
+  }
+}
+
+@media (max-width: 390px) {
+  /* iPhone 12 Pro mini-fix: ещё компактнее */
+  :root {
+    --logo-h: 18px;
+  }
+  .logo-cell img {
+    height: 18px !important;
+  }
+  .logo-plate {
+    column-gap: 12px !important;
+  }
+}
 
 </style>
 </head>
